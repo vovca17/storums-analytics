@@ -1,0 +1,1 @@
+ALTER TYPE "TaxRegime" ADD VALUE 'NONE';

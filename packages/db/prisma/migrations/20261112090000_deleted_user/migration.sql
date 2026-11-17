@@ -1,0 +1,9 @@
+-- CreateTable
+CREATE TABLE "DeletedUser" (
+    "id" UUID NOT NULL,
+    "deletedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "DeletedUser_pkey" PRIMARY KEY ("id")
+);
+
+ALTER TABLE "DeletedUser" ENABLE ROW LEVEL SECURITY;

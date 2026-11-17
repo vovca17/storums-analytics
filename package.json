@@ -1,0 +1,30 @@
+{
+  "name": "storums",
+  "private": true,
+  "packageManager": "pnpm@10.18.0",
+  "engines": {
+    "node": "26.x"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "db:start": "pnpm --filter @storums/db db:start",
+    "db:migrate": "pnpm --filter @storums/db migrate:dev",
+    "db:seed": "pnpm --filter @storums/db seed"
+  },
+  "devDependencies": {
+    "turbo": "2.5.8",
+    "typescript": "5.9.3"
+  },
+  "pnpm": {
+    "auditConfig": {
+      "ignoreGhsas": [
+        "GHSA-mrhx-c7xc-m3w5",
+        "GHSA-ggr8-5vv4-36mx"
+      ]
+    }
+  }
+}
