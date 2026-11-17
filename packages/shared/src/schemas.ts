@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { D } from './money';
 
 /** Денежное поле из формы: число или строка "1234.5", не больше 2 знаков после точки. */
 export const MoneyField = z
@@ -161,13 +162,23 @@ const EventBase = z.object({
   comment: CommentText.optional(),
 });
 
+/** Расход по событию возможен, только если выбрана квартира и сумма больше нуля. */
+export function eventExpenseReady(propertyId: string | null | undefined, amount: string | null | undefined): boolean {
+  if (!propertyId || !amount) return false;
+  try {
+    return D(amount).gt(0);
+  } catch {
+    return false;
+  }
+}
+
 export const EVENT_EXPENSE_NEEDS = 'Выберите квартиру и укажите сумму';
 
 export const CreateEvent = EventBase.extend({
   /** Отметка «сделано» создаёт расход на сумму события */
   countAsExpense: z.boolean().default(false),
 }).superRefine((v, ctx) => {
-  if (v.countAsExpense && (!v.propertyId || !v.amount || !(Number(v.amount) > 0))) {
+  if (v.countAsExpense && !eventExpenseReady(v.propertyId, v.amount)) {
     ctx.addIssue({ code: 'custom', path: ['countAsExpense'], message: EVENT_EXPENSE_NEEDS });
   }
 });

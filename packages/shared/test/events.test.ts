@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { addDays, CreateEvent, daysBetween, expenseCategoryKey, occurrences, todayDate, todayIso, UpdateEvent } from '../src';
+import { addDays, CreateEvent, daysBetween, eventExpenseReady, expenseCategoryKey, occurrences, todayDate, todayIso, UpdateEvent } from '../src';
 
 describe('occurrences', () => {
   it('разовое событие — только если попадает в отрезок', () => {
@@ -64,5 +64,23 @@ describe('учёт события в расходах', () => {
     expect(expenseCategoryKey('REPAIR')).toBe('repair');
     expect(expenseCategoryKey('METER_READINGS')).toBe('utilities');
     expect(expenseCategoryKey('PAYMENT')).toBe('other_expense');
+  });
+});
+
+describe('eventExpenseReady', () => {
+  it('нужны квартира и сумма больше нуля', () => {
+    expect(eventExpenseReady('p1', '1500.00')).toBe(true);
+    expect(eventExpenseReady('p1', '0.01')).toBe(true);
+  });
+
+  it('без квартиры, пустая, нулевая или некорректная сумма — нет', () => {
+    expect(eventExpenseReady(null, '100')).toBe(false);
+    expect(eventExpenseReady('', '100')).toBe(false);
+    expect(eventExpenseReady('p1', null)).toBe(false);
+    expect(eventExpenseReady('p1', undefined)).toBe(false);
+    expect(eventExpenseReady('p1', '')).toBe(false);
+    expect(eventExpenseReady('p1', '0')).toBe(false);
+    expect(eventExpenseReady('p1', '0.00')).toBe(false);
+    expect(eventExpenseReady('p1', 'abc')).toBe(false);
   });
 });

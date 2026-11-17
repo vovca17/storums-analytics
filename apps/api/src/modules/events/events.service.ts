@@ -3,6 +3,7 @@ import {
   addDays,
   D,
   EVENT_EXPENSE_NEEDS,
+  eventExpenseReady,
   expenseCategoryKey,
   rentBalance,
   clampDate,
@@ -78,7 +79,7 @@ export class EventsService {
     // Итоговое состояние события: расход нужен и квартира с суммой
     const propertyId = dto.propertyId === undefined ? cur.propertyId : dto.propertyId;
     const amount = dto.amount === undefined ? cur.amount?.toString() : dto.amount;
-    if ((dto.countAsExpense ?? cur.countAsExpense) && (!propertyId || !amount || !(Number(amount) > 0))) {
+    if ((dto.countAsExpense ?? cur.countAsExpense) && !eventExpenseReady(propertyId, amount)) {
       throw new BadRequestException(EVENT_EXPENSE_NEEDS);
     }
     const { date, ...rest } = dto;
